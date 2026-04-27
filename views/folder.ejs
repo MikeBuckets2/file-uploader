@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles/main.css" />
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="container">
+    <p class="breadcrumb"><a href="/">Home</a> / <%= folder.name %></p>
+
+    <div class="section-header">
+      <h2>📁 <%= folder.name %></h2>
+      <div style="display: flex; gap: 8px;">
+        <a href="/folders/<%= folder.id %>/edit" class="btn btn-small btn-gray">Rename</a>
+        <a href="/folders/<%= folder.id %>/share" class="btn btn-small btn-gray">Share</a>
+        <form method="POST" action="/folders/<%= folder.id %>/delete" style="display:inline;">
+          <button type="submit" class="btn btn-small btn-red" onclick="return confirm('Delete this folder?')">Delete</button>
+        </form>
+      </div>
+    </div>
+
+    <div class="upload-area">
+      <form method="POST" action="/files/upload/<%= folder.id %>" enctype="multipart/form-data">
+        <input type="file" name="file" required />
+        <button type="submit" class="btn btn-blue">Upload to this folder</button>
+      </form>
+      <p class="upload-hint">Max 10MB — jpg, png, gif, pdf, txt, doc, docx, xlsx, csv</p>
+    </div>
+
+    <% if (folder.files.length === 0) { %>
+      <p class="empty-msg">No files in this folder yet.</p>
+    <% } else { %>
+      <div class="file-list">
+        <% folder.files.forEach(function(file) { %>
+          <div class="file-row">
+            <a href="/files/<%= file.id %>" class="file-link">📄 <%= file.name %></a>
+            <span class="file-size"><%= (file.size / 1024).toFixed(1) %> KB</span>
+            <div class="file-actions">
+              <a href="/files/<%= file.id %>/download" class="btn btn-small btn-gray">Download</a>
+              <form method="POST" action="/files/<%= file.id %>/delete" style="display:inline;">
+                <button type="submit" class="btn btn-small btn-red" onclick="return confirm('Delete this file?')">Delete</button>
+              </form>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>
