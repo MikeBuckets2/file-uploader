@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles/main.css" />
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="container">
+    <div class="form-card">
+      <h1>Share "<%= folder.name %>"</h1>
+      <p style="color: #555; margin-bottom: 20px; font-size: 14px;">
+        This creates a link anyone can use to view this folder's files. No login needed.
+      </p>
+
+      <% if (error) { %>
+        <ul class="error-list">
+          <li><%= error %></li>
+        </ul>
+      <% } %>
+
+      <form method="POST" action="/folders/<%= folder.id %>/share">
+        <div class="form-group">
+          <label for="days">Link expires after (days)</label>
+          <input type="number" id="days" name="days" min="1" max="365" value="7" required />
+        </div>
+        <div style="display: flex; gap: 10px; margin-top: 6px;">
+          <button type="submit" class="btn btn-blue">Create Link</button>
+          <a href="/folders/<%= folder.id %>" class="btn btn-gray">Cancel</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
