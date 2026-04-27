@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> - Shared</title>
+  <link rel="stylesheet" href="/styles/main.css" />
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="container">
+    <div class="share-notice">
+      This is a shared folder. Link expires on
+      <strong><%= new Date(expiresAt).toLocaleDateString() %></strong>.
+    </div>
+
+    <h2>📁 <%= folder.name %></h2>
+    <p style="color: #666; font-size: 14px; margin: 8px 0 20px;">
+      <%= folder.files.length %> file(s)
+    </p>
+
+    <% if (folder.files.length === 0) { %>
+      <p class="empty-msg">This folder has no files.</p>
+    <% } else { %>
+      <div class="file-list">
+        <% folder.files.forEach(function(file) { %>
+          <div class="file-row">
+            <span class="file-link">📄 <%= file.name %></span>
+            <span class="file-size"><%= (file.size / 1024).toFixed(1) %> KB</span>
+            <div class="file-actions">
+              <a href="<%= file.url %>" target="_blank" class="btn btn-small btn-blue">View</a>
+            </div>
+          </div>
+        <% }); %>
+      </div>
+    <% } %>
+  </div>
+</body>
+</html>
