@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles/main.css" />
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="container">
+    <p class="breadcrumb">
+      <% if (file.folder) { %>
+        <a href="/">Home</a> / <a href="/folders/<%= file.folder.id %>"><%= file.folder.name %></a> / <%= file.name %>
+      <% } else { %>
+        <a href="/">Home</a> / <%= file.name %>
+      <% } %>
+    </p>
+
+    <div class="detail-card">
+      <h2><%= file.name %></h2>
+      <table class="info-table">
+        <tr>
+          <td class="info-label">Size</td>
+          <td><%= (file.size / 1024).toFixed(1) %> KB</td>
+        </tr>
+        <tr>
+          <td class="info-label">Uploaded</td>
+          <td><%= new Date(file.createdAt).toLocaleString() %></td>
+        </tr>
+        <tr>
+          <td class="info-label">Folder</td>
+          <td><%= file.folder ? file.folder.name : 'Not in a folder' %></td>
+        </tr>
+      </table>
+      <div style="display: flex; gap: 10px; margin-top: 20px;">
+        <a href="/files/<%= file.id %>/download" class="btn btn-blue">Download</a>
+        <form method="POST" action="/files/<%= file.id %>/delete" style="display:inline;">
+          <button type="submit" class="btn btn-red" onclick="return confirm('Delete this file?')">Delete</button>
+        </form>
+        <a href="<%= file.folder ? '/folders/' + file.folder.id : '/' %>" class="btn btn-gray">Go Back</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
