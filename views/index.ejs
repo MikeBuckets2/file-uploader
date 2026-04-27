@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/styles/main.css" />
+</head>
+<body>
+  <%- include('partials/nav') %>
+
+  <div class="container">
+    <% if (!user) { %>
+      <div class="welcome-box">
+        <h1>Welcome to File Uploader</h1>
+        <p>Sign up or log in to start uploading and organizing your files.</p>
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
+          <a href="/sign-up" class="btn btn-blue">Sign Up</a>
+          <a href="/login" class="btn btn-gray">Log In</a>
+        </div>
+      </div>
+    <% } else { %>
+
+      <div class="section-header">
+        <h2>Folders</h2>
+        <a href="/folders/new" class="btn btn-blue">New Folder</a>
+      </div>
+
+      <% if (folders.length === 0) { %>
+        <p class="empty-msg">No folders yet. Create one to get started!</p>
+      <% } else { %>
+        <div class="folder-grid">
+          <% folders.forEach(function(folder) { %>
+            <div class="folder-card">
+              <a href="/folders/<%= folder.id %>" class="folder-link">
+                📁 <%= folder.name %>
+              </a>
+              <p class="folder-count"><%= folder._count.files %> file(s)</p>
+              <div class="card-actions">
+                <a href="/folders/<%= folder.id %>/edit" class="btn btn-small btn-gray">Rename</a>
+                <a href="/folders/<%= folder.id %>/share" class="btn btn-small btn-gray">Share</a>
+                <form method="POST" action="/folders/<%= folder.id %>/delete" style="display:inline;">
+                  <button type="submit" class="btn btn-small btn-red" onclick="return confirm('Delete this folder? Files inside will not be deleted.')">Delete</button>
+                </form>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+
+      <div class="section-header" style="margin-top: 40px;">
+        <h2>Files (not in a folder)</h2>
+      </div>
+
+      <div class="upload-area">
+        <form method="POST" action="/files/upload" enctype="multipart/form-data">
+          <input type="file" name="file" required />
+          <button type="submit" class="btn btn-blue">Upload</button>
+        </form>
+        <p class="upload-hint">Max 10MB — jpg, png, gif, pdf, txt, doc, docx, xlsx, csv</p>
+      </div>
+
+      <% if (looseFiles.length === 0) { %>
+        <p class="empty-msg">No files here yet.</p>
+      <% } else { %>
+        <div class="file-list">
+          <% looseFiles.forEach(function(file) { %>
+            <div class="file-row">
+              <a href="/files/<%= file.id %>" class="file-link">📄 <%= file.name %></a>
+              <span class="file-size"><%= (file.size / 1024).toFixed(1) %> KB</span>
+              <div class="file-actions">
+                <a href="/files/<%= file.id %>/download" class="btn btn-small btn-gray">Download</a>
+                <form method="POST" action="/files/<%= file.id %>/delete" style="display:inline;">
+                  <button type="submit" class="btn btn-small btn-red" onclick="return confirm('Delete this file?')">Delete</button>
+                </form>
+              </div>
+            </div>
+          <% }); %>
+        </div>
+      <% } %>
+
+    <% } %>
+  </div>
+</body>
+</html>
