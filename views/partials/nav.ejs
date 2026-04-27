@@ -1,0 +1,15 @@
+<nav class="navbar">
+  <a href="/" class="navbar-brand">File Uploader</a>
+  <div class="navbar-links">
+    <% if (user) { %>
+      <span class="nav-email"><%= user.email %></span>
+      <a href="/folders/new">New Folder</a>
+      <form method="POST" action="/logout" style="display:inline;">
+        <button type="submit" class="nav-logout-btn">Log Out</button>
+      </form>
+    <% } else { %>
+      <a href="/login">Log In</a>
+      <a href="/sign-up">Sign Up</a>
+    <% } %>
+  </div>
+</nav>
